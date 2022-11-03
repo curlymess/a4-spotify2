@@ -1,20 +1,32 @@
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
 import { Themes } from "../../assets/Themes";
 import { millisToMinutesAndSeconds } from '../../utils';
+import { Ionicons } from '@expo/vector-icons';
 
-const Song = ({indexNum, albumImg, title, artist, albumName, duration }) => 
+import SongPreview from "./SongPreview";
+import SongDetail from './SongDetail';
+
+const Song = ({indexNum, albumImg, title, artist, albumName, duration, navigation, previewURL, externalURL }) => 
 {
   return (
     <View style={styles.container}>
-
-     <Text style={[styles.txt, styles.centerTxt, styles.artistTxt]}>{indexNum}</Text>
-     <Image style={styles.img} source={albumImg}/> 
-     <View style={styles.info}>
-        <Text style={[styles.stackTxt]} numberOfLines={1}>{title}</Text>
-        <Text style={[styles.stackTxt, styles.artistTxt]} numberOfLines={1}>{artist}</Text>
-     </View>
-     <Text style={styles.txt} numberOfLines={1}>{albumName}</Text>
-     <Text style={styles.txt}>{millisToMinutesAndSeconds(duration)}</Text>
+        <Pressable onPress={() => navigation.navigate(SongPreview)}> 
+            <Ionicons name="play-circle" size={32} color="green"  onPress={(e) => {
+                e.stopPropagation();
+                navigation.navigate('SongPreview', {url: {previewURL}}) // how to display url? now
+            }} 
+            />
+        </Pressable>
+        <Pressable style={styles.songContainer} onPress={() => navigation.navigate('SongDetail', {url: externalURL}) }>
+            <Image style={styles.img} source={albumImg}/> 
+            <View style={styles.info}>
+                <Text style={[styles.stackTxt]} numberOfLines={1}>{title}</Text>
+                <Text style={[styles.stackTxt, styles.artistTxt]} numberOfLines={1}>{artist}</Text>
+            </View>
+            <Text style={styles.txt} numberOfLines={1}>{albumName}</Text>
+            <Text style={styles.txt}>{millisToMinutesAndSeconds(duration)}</Text>
+        </Pressable>
+        
     </View>  
   );
 };
@@ -32,6 +44,11 @@ container: {
     width: '100%',
     marginBottom: 4,  
 },
+songContainer: {
+    flexDirection: 'row',
+    flex: 1,
+},
+
 img: {
     flex: 1,
     height: 64,

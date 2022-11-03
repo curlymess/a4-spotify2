@@ -3,9 +3,12 @@ import { Themes } from "../../assets/Themes";
 import Song from '../components/Song'
 import images from '../../assets/Images/images';
 
-const renderSong = ({ item, index }) =>  {
+const renderSong = ( item, index, navigation ) =>  {
     return (
         <Song 
+        navigation={navigation}
+        previewURL={item.preview_url}
+        externalURL={item.external_urls.spotify}
         indexNum={index} 
         albumName={item.album.name}
         albumImg={item.album.images}
@@ -15,7 +18,7 @@ const renderSong = ({ item, index }) =>  {
     );
 };
 
-const SongList = ( props ) => 
+const SongList = ( {tracks, navigation} ) => 
 {
   return ( 
     <View style={styles.container}>
@@ -24,9 +27,9 @@ const SongList = ( props ) =>
             <Text style={styles.titleTxt}>My Top Tracks</Text>
         </View>
         <View style={styles.listContainer}>
-            <FlatList style={styles.list}
-            data={props.parts}
-            renderItem={({item, index}) => renderSong({item, index})} // this is the problem but how to properly pass?
+            <FlatList style={styles.list} 
+            data={tracks}
+            renderItem={({item, index}) => renderSong(item, index, navigation)} 
             />
         </View>
         
